@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Nav from "./components/Nav";
+import Card from "./components/Card";
+import geekPics from "./geek.json";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    geekPics,
+    score: 0,
+    clicked: []
+  };
+
+  handleClick = event => {
+    console.log("clicked " + this.props.id);
+  };
+
+  render() {
+    return (
+      <div className="ui container">
+        <Nav score={this.state.score} />
+        <div className="ui four cards">
+          {this.state.geekPics.map(geekPic => (
+            <Card
+              handleClick={this.handleClick}
+              id={geekPic.id}
+              key={geekPic.id}
+              image={geekPic.image}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
