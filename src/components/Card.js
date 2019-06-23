@@ -1,10 +1,11 @@
 import React from "react";
+import "./css/card.css";
 
-const Card = props => {
+const Card = card => {
   return (
-    <div className="ui link card" onClick={props.handleClick}>
+    <div className="ui link card" onClick={card.handleClick}>
       <div className="image">
-        <img alt={props.id} src={require("../geekPics/" + props.image)} />
+        <img alt={card.id} src={require("../geekPics/" + card.image)} />
       </div>
     </div>
   );
