@@ -4,43 +4,61 @@ import Card from "./components/Card";
 import geekPics from "./geek.json";
 
 class App extends Component {
+  //set original state
   state = {
     geekPics,
     score: 0,
-    clickedCard: []
+    hiScore: 0,
+    clickedCard: [],
+    msg: "Click a card to begin"
   };
 
+  //to randomize pictures
   randomize = () => {
     console.log(Math.random());
     return 0.5 - Math.random();
   };
 
+  //handle onClick event
   handleClick = event => {
     const currentCard = event.target.alt;
+    //if current card present
     const cardAlreadyClicked = this.state.clickedCard.indexOf(currentCard) > -1;
-    console.log(cardAlreadyClicked);
 
+    //if card present reset state and randomize pictures
     if (cardAlreadyClicked) {
       this.setState({
         geekPics: this.state.geekPics.sort(this.randomize),
         clickedCard: [],
-        score: 0
+        score: 0,
+        msg: "You Lose! Try again."
       });
-      alert("lost");
-    } else {
+    }
+    //otherwise randomize picture and add 1 to score
+    else {
       this.setState(
         {
           geekPics: this.state.geekPics.sort(this.randomize),
           clickedCard: this.state.clickedCard.concat(currentCard),
-          score: this.state.score + 1
+          score: this.state.score + 1,
+          msg: "Good Guess"
         },
+        //if current score if higher than hiscore set new hiscore
+        () => {
+          if (this.state.score > this.state.hiScore) {
+            this.setState({
+              hiScore: this.state.score
+            });
+          }
+        },
+        //if correctly guessed all reset state and randomize pictures
         () => {
           if (this.state.score === 12) {
-            alert("win");
             this.setState({
               geekPics: this.state.geekPics.sort(this.randomize),
               clickedCard: [],
-              score: 0
+              score: 0,
+              msg: "You Beat the Game!!!"
             });
           }
         }
@@ -51,7 +69,11 @@ class App extends Component {
   render() {
     return (
       <div className="ui container">
-        <Nav score={this.state.score} />
+        <Nav
+          msg={this.state.msg}
+          score={this.state.score}
+          hiScore={this.state.hiScore}
+        />
         <div className="ui four cards">
           {this.state.geekPics.map(geekPic => (
             <Card
